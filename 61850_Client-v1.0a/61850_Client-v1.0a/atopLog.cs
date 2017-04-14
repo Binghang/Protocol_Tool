@@ -9,8 +9,6 @@ using System.IO;
 using NLog;
 namespace _61850_Client_v1._0a
 {
-
-
     public static class atopLog
     {
         public static Logger logger = NLog.LogManager.GetCurrentClassLogger();

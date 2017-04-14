@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace _61850_Client_v1._0a
 {
+    
     public class atop61850Base
     {
 

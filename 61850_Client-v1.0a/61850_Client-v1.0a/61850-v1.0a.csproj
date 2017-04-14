@@ -61,7 +61,9 @@
     <Compile Include="atop61850Client.cs" />
     <Compile Include="atop61850DataType.cs" />
     <Compile Include="atop61850Server.cs" />
+    <Compile Include="atopBackendSocketInfo.cs" />
     <Compile Include="atopCygwin.cs" />
+    <Compile Include="atopDataMapping.cs" />
     <Compile Include="atopLog.cs" />
     <Compile Include="atopLogMode.cs" />
     <Compile Include="atopSocketClient.cs" />

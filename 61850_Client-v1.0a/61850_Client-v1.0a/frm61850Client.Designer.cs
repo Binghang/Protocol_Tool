@@ -57,7 +57,7 @@
             this.rtbDispley.Location = new System.Drawing.Point(12, 260);
             this.rtbDispley.Name = "rtbDispley";
             this.rtbDispley.ReadOnly = true;
-            this.rtbDispley.Size = new System.Drawing.Size(546, 290);
+            this.rtbDispley.Size = new System.Drawing.Size(560, 290);
             this.rtbDispley.TabIndex = 2;
             this.rtbDispley.Text = "";
             // 
