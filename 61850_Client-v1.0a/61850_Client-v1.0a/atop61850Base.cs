@@ -9,28 +9,65 @@ namespace _61850_Client_v1._0a
     
     public class atop61850Base
     {
-
+        [STAThread]
         public virtual bool ImportSCL(string ServerName, string Path)
         {
-            string ReturnMessage = atopCygwin.Send($"./import.sh sample root xelas123 {ServerName} {Path}", "import.sh");
+            string ReturnMessage = atopCygwin.Send($"./import.sh sample root xelas123 {ServerName} \"{Path}\"", "import.sh");
             /* 確認回傳資料的內容，有哪些需要判斷 */
-            return true;
+            string[] Data = (ReturnMessage.Trim().Split('\n'));
+            if (Data[Data.Length - 1].Contains("Import completed."))
+                return true;
+            else
+                return false;
         }
 
         public virtual bool StartSCLServer(string ServerIED)
         {
+            bool Flag = true;
+            /* 必須要判斷字元是不是成功 */
             string ReturnMessage = atopCygwin.Send($"./start_server.sh sample root xelas123 {ServerIED}", "start_server.sh");
-            return true;
+            string[] Data = ReturnMessage.Trim().Split('\n');
+            foreach (string line in Data)
+            {
+                if (line .Contains("Error"))
+                {
+                    Flag = false;
+                    break;
+                }
+            }
+            if (Flag)
+                atopLog.WriteLog(atopLogMode.XelasCommandInfo, ReturnMessage);
+            else
+                atopLog.WriteLog(atopLogMode.XelasCommandError, ReturnMessage);
+            return Flag;
         }
 
         public virtual bool StartSCLClient(string ClientIED)
         {
+            bool Flag = true;
+            /* 必須要判斷字元是不是成功 */
             string ReturnMessage = atopCygwin.Send($"./start_client.sh sample root xelas123 C_{ClientIED}", "start_client.sh");
-            return true;
+            string[] Data = ReturnMessage.Trim().Split('\n');
+            foreach (string line in Data)
+            {
+                if (line.Contains("Error"))
+                {
+                    Flag = false;
+                    break;
+                }
+            }
+
+            if (Flag)
+                atopLog.WriteLog(atopLogMode.XelasCommandInfo, ReturnMessage);
+            else
+                atopLog.WriteLog(atopLogMode.XelasCommandError, ReturnMessage);
+
+            return Flag;
         }
 
         public virtual bool Associate(string ServerIED)
         {
+            /* 必須要判斷字元是不是成功 */
             string ReturnMessage = atopCygwin.Send($"./connect.sh sample root xelas123 {ServerIED}", "connect.sh");
             return true;
         }

@@ -67,6 +67,7 @@
     <Compile Include="atopLog.cs" />
     <Compile Include="atopLogMode.cs" />
     <Compile Include="atopSocketClient.cs" />
+    <Compile Include="atopXML.cs" />
     <Compile Include="frm61850.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace _61850_Client_v1._0a
@@ -19,7 +20,9 @@ namespace _61850_Client_v1._0a
 
         private void btn61850_Client_Click(object sender, EventArgs e)
         {
+            //Thread threadUpdate = new Thread(new ThreadStart(_61850_Client));
             frm61850Client _61850Client = new frm61850Client();
+            //Application.Run(_61850Client);
             _61850Client.ShowDialog();
 
             Console.WriteLine("61850 Client");

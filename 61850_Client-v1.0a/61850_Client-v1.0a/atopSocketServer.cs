@@ -13,7 +13,7 @@ namespace _61850_Client_v1._0a
         private int ClinetNo;
         private Socket SocketClient;
 
-        public RequestHandler(int clientNo , Socket socketClient)
+        public RequestHandler(int clientNo, Socket socketClient)
         {
             this.ClinetNo = clientNo;
             this.SocketClient = socketClient;
@@ -72,11 +72,11 @@ namespace _61850_Client_v1._0a
             }
             catch (Exception exError)
             {
-               
+                atopLog.WriteLog(atopLogMode.SystemError, exError.Message);
             }
         }
     }
-    
+
     class atopSocketServer
     {
         public static Socket[] SocketServers;       //一般而言 Server 端都會設計成可以多人同時連線.
@@ -90,7 +90,7 @@ namespace _61850_Client_v1._0a
             SocketServers[0] = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             // 其中 LocalIP 和 SPort 分別為 string 和 int 型態, 前者為 Server端的IP, 後者Server端的Port
-           // SocketServers[0].Bind(new IPEndPoint(IPAddress.Parse(LocalIP), LocalPort));
+            // SocketServers[0].Bind(new IPEndPoint(IPAddress.Parse(LocalIP), LocalPort));
 
             SocketServers[0].Listen(255);      // 進行聆聽; Listen( )為允許 Client
             Console.WriteLine("Start Listen...");
@@ -221,8 +221,8 @@ namespace _61850_Client_v1._0a
                 {
                     SocketServers[SocketClientIndex].Close();
                 }
+                atopLog.WriteLog(atopLogMode.SystemError, exError.Message);
             }
         }
-
     }
 }

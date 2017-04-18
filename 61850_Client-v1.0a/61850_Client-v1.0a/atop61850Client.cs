@@ -37,7 +37,7 @@ namespace _61850_Client_v1._0a
             for (int i = 0; i < Socket_Info.Length; i++)
             {
                 Array.Resize(ref Backend_Socket,1);
-                Backend_Socket[i].Connect(Socket_Info[i].IP_Address, Socket_Info[i].Port);
+               // Backend_Socket[i].Connect(Socket_Info[i].IP_Address, Socket_Info[i].Port);
             }
         }
 
@@ -55,12 +55,12 @@ namespace _61850_Client_v1._0a
                         File_Flag = true;
                         if (base.ImportSCL(ServerIED, item))
                         {
-                            atopLog.WriteLog(atopLogMode.XelasCommandError, $"Import Success : {ServerIED}");
-                            if (base.StartSCLServer(ServerIED))
+                            atopLog.WriteLog(atopLogMode.XelasCommandInfo, $"Import Success : {ServerIED}");
+                            if (base.StartSCLClient(ServerIED))
                             {
                                 atopLog.WriteLog(atopLogMode.XelasCommandInfo, $"Start Success : {ServerIED}");
                                 if (base.Associate(ServerIED))
-                                    atopLog.WriteLog(atopLogMode.XelasCommandError, $"Associate Success : {ServerIED}");
+                                    atopLog.WriteLog(atopLogMode.XelasCommandInfo, $"Associate Success : {ServerIED}");
                                 else
                                 {
                                     atopLog.WriteLog(atopLogMode.XelasCommandError, $"Associate Fail : {ServerIED}");

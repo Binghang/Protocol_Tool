@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NLog;
+using System.Windows.Forms;
 namespace _61850_Client_v1._0a
 {
     class Program
@@ -12,19 +13,21 @@ namespace _61850_Client_v1._0a
         public static Dictionary<string, string> DataType_61850 = new Dictionary<string, string>();
         
 
+        [STAThread]
         static void Main(string[] args)
         {
-
             Console.Clear();
             Console.WriteLine("Atop 61850");
+            atopCygwin.CreateCommandFolderMapping();
             if (args != null && args.Length > 0)
             {
                 Console.WriteLine(AppDomain.CurrentDomain.FriendlyName);
 
                 Console.WriteLine(args[0].ToString());
             }
+
             frm61850 _61850 = new frm61850();
-            _61850.ShowDialog();
+            Application.Run(_61850);
         }
         
         static void CreateDictionary()

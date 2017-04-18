@@ -6,15 +6,14 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 namespace _61850_Client_v1._0a
 {
-
+  
     public static class atopCygwin
     {
         public static Dictionary<string, string> Command_Folder = new Dictionary<string, string>();
-        
         public static string Send(string Command, string Shell_Command)
         {
             Process Carried_Out = new Process();
-            ProcessStartInfo Carried_Out_Info = new ProcessStartInfo();
+            ProcessStartInfo Carried_Out_Info = new System.Diagnostics.ProcessStartInfo(@"C:\cygwin64\bin\bash.exe");
 
             Console.WriteLine($"Send to Cygwin Command : {Command}");
 
@@ -33,7 +32,7 @@ namespace _61850_Client_v1._0a
             return OutputData;
         }
 
-        private static void CreateCommandFolderMapping()
+        public static void CreateCommandFolderMapping()
         {
             Command_Folder.Add("start_server.sh", "scripts");
             Command_Folder.Add("start_client.sh", "scripts");
