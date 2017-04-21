@@ -17,6 +17,7 @@ namespace _61850_Client_v1._0a
             try
             {
                 _ClientSocket.Connect(new IPEndPoint(IPAddress.Parse(IP), Port));
+                
             }
             catch (Exception exError)
             {
@@ -29,31 +30,31 @@ namespace _61850_Client_v1._0a
             get { return _ClientSocket.Connected; }
         }
 
-        public string Send(string Data)
+        public string Send(string Data,bool Wait)
         {
+            atopLog.WriteLog(atopLogMode.SystemInformation, $"Socket Message : {Data}");
             /* string to bytes */
-            byte[] _data = System.Text.Encoding.Default.GetBytes(Data);
+            byte[] _data = System.Text.Encoding.Default.GetBytes(Data + "\r\n");
             /* 傳送資料到Backend */
             _ClientSocket.Send(_data);
-            if (Data.ToUpper() == "END\r\n")
+            if (Wait)
             {
                 while (true)
                 {
                     /* 取得Buffer的資料數量 */
                     int bytesRec = _ClientSocket.Receive(_recieveBuffer);
                     /* 回傳的資料 */
-                    Data = Encoding.ASCII.GetString(_recieveBuffer);
+                    Data = Encoding.ASCII.GetString(_recieveBuffer,0,bytesRec);
 
-                    if (Data.Contains("Harness is read"))
+                    atopLog.WriteLog(atopLogMode.SystemInformation, Data);
+                    if (Data.Replace("\0", "") != string.Empty) 
                     {
                         return Data;
                     }
                 }
-                
             }
-            
-            string D = Encoding.ASCII.GetString(_recieveBuffer);
-            return string.Empty;
+            else
+                return string.Empty;
         }
 
         public void Close()

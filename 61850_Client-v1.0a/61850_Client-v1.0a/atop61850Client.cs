@@ -26,6 +26,7 @@ namespace _61850_Client_v1._0a
         private List<Data_Struct_61850> Data_61850 = new List<Data_Struct_61850>();
         private string CID_Path = @"\\10.0.0.187\Document\International Link\PG59XX\QA\eNode Database\MB-50\MBES-50EC\M61-P14-ed2-t5-server";
         private atopSocketClient Backend_Socket = new atopSocketClient();
+        private atopSocketClient Test_Socket = new atopSocketClient();
         /// <summary>
         /// 建立與後端的連線
         /// </summary>
@@ -106,8 +107,8 @@ namespace _61850_Client_v1._0a
         {
             atopCSV.Load(@"D:\61850Test.xls");
             Backend_Socket.Connect("192.168.4.82", 8000);
-            Backend_Socket.Send("Setting\r\n");
-            Backend_Socket.Send("Backend01 ETH *.*.*.* 502 192.168.4.84 1 512\r\n");
+            Backend_Socket.Send("Setting",false);
+            Backend_Socket.Send("Backend01 ETH *.*.*.* 502 192.168.4.84 1 512",false);
 
 
             /* 分析資料 */
@@ -126,35 +127,71 @@ namespace _61850_Client_v1._0a
                     SocketPort = Data[7],
                 });
             }
-            Backend_Socket.Send("Mapping\r\n");
+            Backend_Socket.Send("Mapping",false);
             /* Add Backend Point*/
             foreach (var item in atopDataMapping.VisualMapping)
             {
-                Backend_Socket.Send(string.Format("61850-01-01 {0} {1} {2} Modbus-01 {3} {4} {5} 512\r\n", item.IEC61850_SERVERNAME, item.IEC61850_TAGNAME, item.IEC61850_DATATYPE,item.FUNCTION,item.ADDRESS, item.RANGE));
-                Thread.Sleep(5);
+                Backend_Socket.Send(string.Format("61850-01-01 {0} {1} {2} Modbus-01 {3} {4} {5} 512", item.IEC61850_SERVERNAME, item.IEC61850_TAGNAME, item.IEC61850_DATATYPE,item.FUNCTION,item.ADDRESS, item.RANGE),false);
             }
 
-            Backend_Socket.Send("END\r\n");
-
+            if (Backend_Socket.Send("END",true).Contains("Harness is ready"))
+            {
+                Test_Socket.Connect("192.168.4.82", 512);
+            } 
             /* 取的當下測試開始的時間 */
             DateTime Curried_Time = DateTime.Now;
 
             DateTime dtPoll_Static = DateTime.Now.AddSeconds(FirstCase);
             DateTime dtPoll_Change = dtPoll_Static.AddSeconds(SecondCase);
             DateTime dtPoll_Control = dtPoll_Change.AddSeconds(ThirdCase);
+
+            bool poll_static = false;
+            bool poll_change = false;
+            bool poll_control = false;
+
             while (true)
             {
                 if (DateTime.Now < dtPoll_Static)
-                    Poll_Static();
+                {
+                    if (!poll_static)
+                    {
+                        poll_static = true;
+                        atopLog.WriteLog(atopLogMode.SystemInformation, "Poll Static Start");
+                    }
+
+                }
                 else if ((DateTime.Now > dtPoll_Static) && (DateTime.Now < dtPoll_Change))
-                    Poll_Chang();
+                {
+                    if (!poll_change)
+                    {
+                        poll_static = false;
+                        poll_change = true;
+                        atopLog.WriteLog(atopLogMode.SystemInformation, "Poll Change Start");
+                    }
+
+                }
                 else if ((DateTime.Now > dtPoll_Change) && (DateTime.Now < dtPoll_Control))
-                    Poll_Control();
+                {
+                    if (!poll_control)
+                    {
+                        poll_change = false;
+                        poll_control = true;
+                        atopLog.WriteLog(atopLogMode.SystemInformation, "Poll Control Start");
+                    }
+                }
                 else
                 {
                     Console.WriteLine("End");
                     break;
                 }
+
+                if (poll_static)
+                    Poll_Static();
+                else if (poll_change)
+                    Poll_Chang();
+                else if (poll_control)
+                    Poll_Control();
+
             }
         }
 
@@ -164,15 +201,18 @@ namespace _61850_Client_v1._0a
             {
                 /* Read Frontend Data */
                 string Carried_Data = base.GetValue(item.IEC61850_SERVERNAME, item.IEC61850_TAGNAME, item.IEC61850_DATATYPE);
-                atopLog.WriteLog(atopLogMode.XelasCommandInfo, $"Get Carried Value : {Carried_Data}");
                 /* Read Backend Data */
-                string Backend_Data = Backend_Socket.Send(string.Format("Get {0} {1} {2}", item.FUNCTION, item.ADDRESS, item.RANGE));
+                string Backend_Data = Test_Socket.Send(string.Format("Get {0} {1} {2}", atopHarnessCommand.GetValue( item.FUNCTION), item.ADDRESS, item.RANGE),true);
                 atopLog.WriteLog(atopLogMode.XelasCommandInfo, $"Get Backend Value : {Backend_Data}");
                 /* Compare Data */
                 if (Carried_Data != Backend_Data)
                 {
                     /* 測試失敗 */
                     atopLog.WriteLog(atopLogMode.TestFail, $"{item.IEC61850_TAGNAME} Value: {Carried_Data} , Backend Value : {Backend_Data}");
+                }
+                else
+                {
+
                 }
             }
         }
@@ -182,13 +222,14 @@ namespace _61850_Client_v1._0a
             foreach (var item in atopDataMapping.VisualMapping)
             {
                 /* Change Backend Data */
-                string Carried_Data = Backend_Socket.Send(string.Format("Set {0} {1} {2}", item.ADDRESS, item.FUNCTION, item.RANGE));
+                string Carried_Data = Test_Socket.Send(string.Format("Set {0} {1} {2}", item.FUNCTION, item.ADDRESS, item.RANGE),true);
                 /* Read Frontend Data */
                 string Frontend_Data = base.GetValue(item.IEC61850_SERVERNAME, item.IEC61850_TAGNAME, item.IEC61850_DATATYPE);
                 /* Compare Data */
                 if (Carried_Data != Frontend_Data)
                 {
                     /* 測試失敗 */
+                    //atopLog.WriteLog(atopLogMode.TestFail, $"{item.IEC61850_TAGNAME} Value: {Carried_Data} , Backend Value : {Backend_Data}");
                 }
             }
         }
@@ -201,11 +242,12 @@ namespace _61850_Client_v1._0a
                 if (base.SetData(item.IEC61850_SERVERNAME, item.IEC61850_TAGNAME, item.IEC61850_DATATYPE, "123"))
                 {
                     /* Read Backend Datat */
-                    string Backend_Data = Backend_Socket.Send(string.Format("Get {0} {1} {2}", item.ADDRESS, item.FUNCTION, item.RANGE));
+                    string Backend_Data = Test_Socket.Send(string.Format("Get {0} {1} {2}", item.FUNCTION, item.ADDRESS, item.RANGE),false);
                     /* Compare Data */
                     if ("123" != Backend_Data)
                     {
                         /* 測試失敗 */
+                        //atopLog.WriteLog(atopLogMode.TestFail, $"{item.IEC61850_TAGNAME} Value: {Carried_Data} , Backend Value : {Backend_Data}");
                     }
                 }
             }

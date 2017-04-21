@@ -27,7 +27,7 @@ namespace _61850_Client_v1._0a
             //執行程式
             Carried_Out.Start();
             string OutputData = Carried_Out.StandardOutput.ReadToEnd();
-            Console.WriteLine(OutputData);
+            //Console.WriteLine(OutputData);
             Carried_Out.WaitForExit();
             return OutputData;
         }
