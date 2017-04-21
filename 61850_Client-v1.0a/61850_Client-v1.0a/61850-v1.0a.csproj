@@ -45,6 +45,14 @@
       <HintPath>..\packages\NLog.Elmah.4.0\lib\net35\NLog.Elmah.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NPOI, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.2.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\NPOI.OOXML.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -62,8 +70,10 @@
     <Compile Include="atop61850DataType.cs" />
     <Compile Include="atop61850Server.cs" />
     <Compile Include="atopBackendSocketInfo.cs" />
+    <Compile Include="atopCSV.cs" />
     <Compile Include="atopCygwin.cs" />
     <Compile Include="atopDataMapping.cs" />
+    <Compile Include="atopHarnessCommand.cs" />
     <Compile Include="atopLog.cs" />
     <Compile Include="atopLogMode.cs" />
     <Compile Include="atopSocketClient.cs" />

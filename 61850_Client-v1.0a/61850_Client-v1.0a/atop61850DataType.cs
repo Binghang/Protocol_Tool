@@ -12,19 +12,25 @@ namespace _61850_Client_v1._0a
 
         private static void CreateDictionary()
         {
-            DataType_61850.Add("SP", "BOOLEAN");
+            DataType_61850.Add("Single Point", "BOOLEAN");
             DataType_61850.Add("DP", "BITSTRING");
             DataType_61850.Add("Integer 8", "INTEGER");
             DataType_61850.Add("Integer 32", "INTEGER");
             DataType_61850.Add("Unsigned 8", "INTEGER");
             DataType_61850.Add("Unsigned 16", "UNSIGNED");
             DataType_61850.Add("Unsigned 32", "UNSIGNED");
-            DataType_61850.Add("FT", "FLOAT");
+            DataType_61850.Add("Float 32", "FLOAT");
         }
 
         public static string GetDataType(string Type)
         {
-            return DataType_61850[Type];
+            if (DataType_61850.Count == 0)
+            {
+                CreateDictionary();
+                return DataType_61850[Type];
+            }
+            else
+                return DataType_61850[Type];
         }
     }
 }

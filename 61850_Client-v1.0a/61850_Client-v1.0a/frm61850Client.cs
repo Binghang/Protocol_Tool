@@ -25,7 +25,7 @@ namespace _61850_Client_v1._0a
         
         private void frm61850Client_Load(object sender, EventArgs e)
         {
-            PrintCIDFiles();
+            //PrintCIDFiles();
             Backend_Socket_Information[] SI = new Backend_Socket_Information[1] {
                 new Backend_Socket_Information {
                     IP_Address = "192.168.4.222",
@@ -55,10 +55,8 @@ namespace _61850_Client_v1._0a
             {
                 _61850Client.ImportSCL(ckbCID_Files.CheckedItems[i].ToString().Replace(".cid",""), CID_Item[ckbCID_Files.CheckedItems[i].ToString()]);
                 _61850Client.StartSCLClient(ckbCID_Files.CheckedItems[i].ToString().Replace(".cid", ""));
-               // _61850Client.Associate(ckbCID_Files.CheckedItems[i].ToString().Replace(".cid", ""));
             }
 
-           // _61850Client.Start_Reliability(10, 10, 10);
         }
 
         [STAThread]
@@ -87,7 +85,7 @@ namespace _61850_Client_v1._0a
 
         private void btnStartTest_Click(object sender, EventArgs e)
         {
-
+            _61850Client.Start_Reliability(10, 10, 10);
         }
     }
 }

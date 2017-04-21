@@ -13,7 +13,7 @@ namespace _61850_Client_v1._0a
         private static bool _isLoad = false;
 
         public static List<string> Data = new List<string>();
-
+        public static List<DataStruct61850> VisualMapping = new List<DataStruct61850>();
         public static bool IsLoad
         {
             get { return _isLoad; }

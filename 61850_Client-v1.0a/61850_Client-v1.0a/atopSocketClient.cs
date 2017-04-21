@@ -35,10 +35,25 @@ namespace _61850_Client_v1._0a
             byte[] _data = System.Text.Encoding.Default.GetBytes(Data);
             /* 傳送資料到Backend */
             _ClientSocket.Send(_data);
-            /* 取得Buffer的資料數量 */
-            int bytesRec =  _ClientSocket.Receive(_recieveBuffer);
-            /* 回傳的資料 */
-            return Data = Encoding.ASCII.GetString(_recieveBuffer);
+            if (Data.ToUpper() == "END\r\n")
+            {
+                while (true)
+                {
+                    /* 取得Buffer的資料數量 */
+                    int bytesRec = _ClientSocket.Receive(_recieveBuffer);
+                    /* 回傳的資料 */
+                    Data = Encoding.ASCII.GetString(_recieveBuffer);
+
+                    if (Data.Contains("Harness is read"))
+                    {
+                        return Data;
+                    }
+                }
+                
+            }
+            
+            string D = Encoding.ASCII.GetString(_recieveBuffer);
+            return string.Empty;
         }
 
         public void Close()

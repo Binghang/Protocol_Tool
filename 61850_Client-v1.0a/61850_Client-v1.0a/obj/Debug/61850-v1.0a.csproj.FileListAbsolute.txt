@@ -45,3 +45,4 @@ C:\Users\test\Desktop\61850_Client-v1.0a\61850_Client-v1.0a\obj\Debug\_61850_Cli
 C:\Users\test\Desktop\61850_Client-v1.0a\61850_Client-v1.0a\obj\Debug\_61850_Client_v1._0a.frm61850Client.resources
 C:\Users\test\Desktop\61850_Client-v1.0a\61850_Client-v1.0a\obj\Debug\_61850_Client_v1._0a.frm61850Server.resources
 C:\Users\test\Desktop\61850_Client-v1.0a\61850_Client-v1.0a\obj\Debug\61850-v1.0a.csproj.GenerateResource.Cache
+C:\Users\Bing\Documents\GitHub\Protocol_Tool\61850_Client-v1.0a\61850_Client-v1.0a\obj\Debug\61850-v1.0a.csprojResolveAssemblyReference.cache

@@ -120,22 +120,24 @@ namespace _61850_Client_v1._0a
                     int Count = OutputData.Split('\n').Count();
                     string[] returnData = OutputData.Split('\n')[Count - 2].Split('|');
                     /* 這邊需要修改，在確定一下如果有Error的話要怎麼處理 */
-                    if (returnData[6].Trim().Equals("COMPLETED"))
+                    if (returnData[6].Trim() =="COMPLETED")
                     {
                         atopLog.WriteLog(atopLogMode.SystemInformation, "Submit Command : Success");
                         Flag = true;
+                        break;
                     }
-                    else if (returnData[6].Trim().Equals("ERROR"))
+                    else if (returnData[6].Trim() == ("ERROR"))
                     {
                         atopLog.WriteLog(atopLogMode.SystemInformation, "Submit Command : Error");
                         Flag = false;
+                        break;
                     }
                 }
-                if ((Curry_Time.Second - DateTime.Now.Second) > 5)
-                {
-                    atopLog.WriteLog(atopLogMode.SystemInformation, "Submit Command : Timeout");
-                    Flag = false;
-                }
+                //if ((Curry_Time.Second - DateTime.Now.Second) > 5)
+                //{
+                //    atopLog.WriteLog(atopLogMode.SystemInformation, "Submit Command : Timeout");
+                //    Flag = false;
+                //}
                 return Flag;
             }
             catch (Exception exError)
@@ -172,7 +174,7 @@ namespace _61850_Client_v1._0a
 
                 string ReturnData = string.Empty;
                 Dictionary<string, string> TempData = new Dictionary<string, string>();
-                string[] OutputData = atopCygwin.Send($"./show.sh sample root xelas123 {ServerName} ACSI_DATA_ATTR \"type = '{atop61850DataType.GetDataType(DataType)}'\" dataRef,type,{getCommandType(atop61850DataType.GetDataType(DataType))}", "show.sh").Split('\n');
+                string[] OutputData = atopCygwin.Send($"./show.sh sample root xelas123 {ServerName} ACSI_DATA_ATTR \"type = '{DataType}'\" dataRef,type,{getCommandType(DataType)}", "show.sh").Split('\n');
                 foreach (var item in OutputData)
                 {
                     Console.WriteLine(item);
@@ -189,6 +191,7 @@ namespace _61850_Client_v1._0a
                             {
                                 string[] RealData = item.Split('|');
                                 TempData.Add(RealData[1].Trim(), RealData[3]);
+                                ReturnData = RealData[3];
                             }
                         }
                     }
@@ -198,6 +201,7 @@ namespace _61850_Client_v1._0a
                         {
                             string[] RealData = item.Split('|');
                             TempData.Add(RealData[1].Trim(), RealData[3]);
+                            ReturnData = RealData[3];
                         }
                     }
                 }

@@ -25,7 +25,7 @@ namespace _61850_Client_v1._0a
     {
         private List<Data_Struct_61850> Data_61850 = new List<Data_Struct_61850>();
         private string CID_Path = @"\\10.0.0.187\Document\International Link\PG59XX\QA\eNode Database\MB-50\MBES-50EC\M61-P14-ed2-t5-server";
-        private atopSocketClient[] Backend_Socket;
+        private atopSocketClient Backend_Socket = new atopSocketClient();
         /// <summary>
         /// 建立與後端的連線
         /// </summary>
@@ -33,10 +33,11 @@ namespace _61850_Client_v1._0a
         /// <param name="BackendPort">Backend Socket Port</param>
         public atop61850Client(Backend_Socket_Information[] Socket_Info)
         {
+            //Backend_Socket.Connect("", 505);
             /* Backend 有四個那第一個 Backend 就是 Backend_Socket 的陣列第0個 */
             for (int i = 0; i < Socket_Info.Length; i++)
             {
-                Array.Resize(ref Backend_Socket,1);
+                //Array.Resize(ref Backend_Socket,1);
                // Backend_Socket[i].Connect(Socket_Info[i].IP_Address, Socket_Info[i].Port);
             }
         }
@@ -103,6 +104,12 @@ namespace _61850_Client_v1._0a
         /* Start Test 1st Poll Static 2st Poll Change 3st Poll Control*/
         public void Start_Reliability(int FirstCase, int SecondCase, int ThirdCase)
         {
+            atopCSV.Load(@"D:\61850Test.xls");
+            Backend_Socket.Connect("192.168.4.82", 8000);
+            Backend_Socket.Send("Setting\r\n");
+            Backend_Socket.Send("Backend01 ETH *.*.*.* 502 192.168.4.84 1 512\r\n");
+
+
             /* 分析資料 */
             foreach (var item in atopDataMapping.Data)
             {
@@ -119,12 +126,15 @@ namespace _61850_Client_v1._0a
                     SocketPort = Data[7],
                 });
             }
-
+            Backend_Socket.Send("Mapping\r\n");
             /* Add Backend Point*/
-            foreach (var item in Data_61850)
+            foreach (var item in atopDataMapping.VisualMapping)
             {
-                Backend_Socket[Convert.ToInt16(item.SocketPort)].Send(string.Format("Add {0} {1} {2}", item.BackendDataType, item.BackendStartAddr, item.BackendQuantity));
+                Backend_Socket.Send(string.Format("61850-01-01 {0} {1} {2} Modbus-01 {3} {4} {5} 512\r\n", item.IEC61850_SERVERNAME, item.IEC61850_TAGNAME, item.IEC61850_DATATYPE,item.FUNCTION,item.ADDRESS, item.RANGE));
+                Thread.Sleep(5);
             }
+
+            Backend_Socket.Send("END\r\n");
 
             /* 取的當下測試開始的時間 */
             DateTime Curried_Time = DateTime.Now;
@@ -150,28 +160,31 @@ namespace _61850_Client_v1._0a
 
         public void Poll_Static()
         {
-            foreach (var item in Data_61850)
+            foreach (var item in atopDataMapping.VisualMapping)
             {
                 /* Read Frontend Data */
-                string Carried_Data = base.GetValue(item.ServerName, item.TagName, item.BackendStartAddr);
+                string Carried_Data = base.GetValue(item.IEC61850_SERVERNAME, item.IEC61850_TAGNAME, item.IEC61850_DATATYPE);
+                atopLog.WriteLog(atopLogMode.XelasCommandInfo, $"Get Carried Value : {Carried_Data}");
                 /* Read Backend Data */
-                string Backend_Data = Backend_Socket[Convert.ToInt16(item.SocketPort)].Send(string.Format("Get {0} {1} {2}", item.BackendStartAddr, item.BackendDataType, item.BackendQuantity));
+                string Backend_Data = Backend_Socket.Send(string.Format("Get {0} {1} {2}", item.FUNCTION, item.ADDRESS, item.RANGE));
+                atopLog.WriteLog(atopLogMode.XelasCommandInfo, $"Get Backend Value : {Backend_Data}");
                 /* Compare Data */
                 if (Carried_Data != Backend_Data)
                 {
                     /* 測試失敗 */
+                    atopLog.WriteLog(atopLogMode.TestFail, $"{item.IEC61850_TAGNAME} Value: {Carried_Data} , Backend Value : {Backend_Data}");
                 }
             }
         }
 
         public void Poll_Chang()
         {
-            foreach (var item in Data_61850)
+            foreach (var item in atopDataMapping.VisualMapping)
             {
                 /* Change Backend Data */
-                string Carried_Data = Backend_Socket[Convert.ToInt16(item.SocketPort)].Send(string.Format("Set {0} {1} {2}", item.BackendStartAddr, item.BackendDataType, item.BackendQuantity));
+                string Carried_Data = Backend_Socket.Send(string.Format("Set {0} {1} {2}", item.ADDRESS, item.FUNCTION, item.RANGE));
                 /* Read Frontend Data */
-                string Frontend_Data = base.GetValue(item.ServerName, item.TagName, item.Frontend);
+                string Frontend_Data = base.GetValue(item.IEC61850_SERVERNAME, item.IEC61850_TAGNAME, item.IEC61850_DATATYPE);
                 /* Compare Data */
                 if (Carried_Data != Frontend_Data)
                 {
@@ -182,13 +195,13 @@ namespace _61850_Client_v1._0a
 
         public void Poll_Control()
         {
-            foreach (var item in Data_61850)
+            foreach (var item in atopDataMapping.VisualMapping)
             {
                 /* Write Frontend Data */
-                if (base.SetData(item.ServerName, item.TagName, item.ServerName, "123"))
+                if (base.SetData(item.IEC61850_SERVERNAME, item.IEC61850_TAGNAME, item.IEC61850_DATATYPE, "123"))
                 {
                     /* Read Backend Datat */
-                    string Backend_Data = Backend_Socket[Convert.ToInt16(item.SocketPort)].Send(string.Format("Get {0} {1} {2}", item.BackendStartAddr, item.BackendDataType, item.BackendQuantity));
+                    string Backend_Data = Backend_Socket.Send(string.Format("Get {0} {1} {2}", item.ADDRESS, item.FUNCTION, item.RANGE));
                     /* Compare Data */
                     if ("123" != Backend_Data)
                     {
