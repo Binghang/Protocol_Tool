@@ -32,11 +32,10 @@ namespace _61850_Client_v1._0a
 
         public string Send(string Data,bool Wait)
         {
-            atopLog.WriteLog(atopLogMode.SystemInformation, $"Socket Message : {Data}");
             /* string to bytes */
             byte[] _data = System.Text.Encoding.Default.GetBytes(Data + "\r\n");
             /* 傳送資料到Backend */
-            _ClientSocket.Send(_data);
+            _ClientSocket.Send(_data, SocketFlags.None);
             if (Wait)
             {
                 while (true)
@@ -45,8 +44,7 @@ namespace _61850_Client_v1._0a
                     int bytesRec = _ClientSocket.Receive(_recieveBuffer);
                     /* 回傳的資料 */
                     Data = Encoding.ASCII.GetString(_recieveBuffer,0,bytesRec);
-
-                    atopLog.WriteLog(atopLogMode.SystemInformation, Data);
+                    
                     if (Data.Replace("\0", "") != string.Empty) 
                     {
                         return Data;

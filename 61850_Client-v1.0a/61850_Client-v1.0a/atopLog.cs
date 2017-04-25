@@ -17,27 +17,27 @@ namespace _61850_Client_v1._0a
             switch (LogMode)
             {
                 case atopLogMode.TestFail:
-                    Display(ConsoleColor.Black, ConsoleColor.Red, Message);
+                    Display(ConsoleColor.Black, ConsoleColor.Red, DateTime.Now + " - " + Message);
                     logger.Info(Message);
                     break;
                 case atopLogMode.TestSuccess:
-                    Display(ConsoleColor.Black, ConsoleColor.Blue, Message);
+                    Display(ConsoleColor.Black, ConsoleColor.Blue, DateTime.Now + " - " + Message);
                     logger.Info(Message);
                     break;
                 case atopLogMode.XelasCommandError:
-                    Display(ConsoleColor.Black, ConsoleColor.Yellow, Message);
+                    Display(ConsoleColor.Black, ConsoleColor.Yellow, DateTime.Now + " - " + Message);
                     logger.Error(Message);
                     break;
                 case atopLogMode.XelasCommandInfo:
-                    Display(ConsoleColor.Black, ConsoleColor.Blue, Message);
+                    Display(ConsoleColor.Black, ConsoleColor.Blue, DateTime.Now + " - " + Message);
                     logger.Info(Message);
                     break;
                 case atopLogMode.SystemInformation:
-                    Display(ConsoleColor.Black, ConsoleColor.Blue, Message);
+                    Display(ConsoleColor.Black, ConsoleColor.Blue, DateTime.Now + " - " + Message);
                     logger.Info(Message);
                     break;
                 case atopLogMode.SystemError:
-                    Display(ConsoleColor.Black, ConsoleColor.Gray, Message);
+                    Display(ConsoleColor.Black, ConsoleColor.Gray, DateTime.Now + " - " + Message);
                     logger.Error(Message);
                     break;
             }

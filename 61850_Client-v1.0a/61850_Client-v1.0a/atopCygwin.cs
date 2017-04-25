@@ -14,9 +14,6 @@ namespace _61850_Client_v1._0a
         {
             Process Carried_Out = new Process();
             ProcessStartInfo Carried_Out_Info = new System.Diagnostics.ProcessStartInfo(@"C:\cygwin64\bin\bash.exe");
-
-            Console.WriteLine($"Send to Cygwin Command : {Command}");
-
             Carried_Out_Info.Arguments = Command;
             string Carried_Folder = Command_Folder[Shell_Command];
             Carried_Out_Info.WorkingDirectory = @"C:\cygwin64\opt\xelas\iec61850\client\" + Carried_Folder;

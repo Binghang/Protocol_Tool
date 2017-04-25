@@ -17,6 +17,8 @@ namespace _61850_Client_v1._0a
             dicCommand.Add("Disc", "smbdinput");
             dicCommand.Add("HReg", "smbhreg");
             dicCommand.Add("IReg", "smbireg");
+            dicCommand.Add("WCoi", "smbcoil");
+            dicCommand.Add("WHRe", "smbhreg");
         }
 
         public static string GetValue(string Key)

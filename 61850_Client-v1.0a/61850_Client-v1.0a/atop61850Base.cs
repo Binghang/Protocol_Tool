@@ -175,36 +175,35 @@ namespace _61850_Client_v1._0a
                 string ReturnData = string.Empty;
                 Dictionary<string, string> TempData = new Dictionary<string, string>();
                 string[] OutputData = atopCygwin.Send($"./show.sh sample root xelas123 {ServerName} ACSI_DATA_ATTR \"type = '{DataType}'\" dataRef,type,{getCommandType(DataType)}", "show.sh").Split('\n');
-                foreach (var item in OutputData)
+
+                for (int i = 0; i < OutputData.Length; i++)
                 {
-                    Console.WriteLine(item);
                     if (TempData.Count > 0)
                     {
                         if (TempData.ContainsKey(TagName))
                         {
                             ReturnData = TempData[TagName];
-                            break;
+                            return ReturnData;
                         }
                         else
                         {
-                            if (item != string.Empty && item.Substring(0, 1) == "|")
+                            if (OutputData[i] != string.Empty && OutputData[i].StartsWith("|"))
                             {
-                                string[] RealData = item.Split('|');
+                                string[] RealData = OutputData[i].Split('|');
                                 TempData.Add(RealData[1].Trim(), RealData[3]);
-                                ReturnData = RealData[3];
                             }
                         }
                     }
                     else
                     {
-                        if (item != string.Empty && item.Substring(0, 1) == "|")
+                        if (OutputData[i] != string.Empty && OutputData[i].StartsWith("|"))
                         {
-                            string[] RealData = item.Split('|');
+                            string[] RealData = OutputData[i].Split('|');
                             TempData.Add(RealData[1].Trim(), RealData[3]);
-                            ReturnData = RealData[3];
                         }
                     }
                 }
+                atopLog.WriteLog(atopLogMode.XelasCommandInfo, $"Xelas Rutrn Data {ReturnData}");
                 return ReturnData;
             }
             catch (Exception exError)
@@ -238,5 +237,21 @@ namespace _61850_Client_v1._0a
             return Value;
         }
 
+        public string GetRandomValue(string DataType)
+        {
+            Random _rd = new Random();
+            switch (DataType)
+            {
+                case "Coil":
+                case "WCoi":
+                case "Disc":
+                    return _rd.Next(0, 2).ToString();
+                case "HReg":
+                case "WHRe":
+                case "IReg":
+                    return _rd.Next(0, 255).ToString();
+            }
+            return string.Empty;
+        }
     }
 }

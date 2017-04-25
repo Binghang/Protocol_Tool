@@ -160,7 +160,7 @@ namespace _61850_Client_v1._0a
                 atopDataMapping.VisualMapping.Add(new DataStruct61850
                 {
                     IEC61850_SERVERNAME = Row.Cells[columnindex61850.TAGNAME].ToString().Split('$')[0],
-                    IEC61850_DATATYPE = atop61850DataType.GetDataType(Row.Cells[columnindex61850.DATATYPE].ToString()),
+                    IEC61850_DATATYPE = Row.Cells[columnindex61850.DATATYPE].ToString(),
                     IEC61850_TAGNAME = InsertTagName(Row.Cells[columnindex61850.TAGNAME].ToString(), Row.Cells[columnindex61850.FC].ToString()),
                     IEC61850_EXCHANGETYPE = Row.Cells[columnindex61850.EXCHANGETYPE].ToString(),
                     IEC61850_FC = Row.Cells[columnindex61850.FC].ToString(),

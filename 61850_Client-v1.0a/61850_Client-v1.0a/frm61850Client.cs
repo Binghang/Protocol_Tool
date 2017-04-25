@@ -17,7 +17,6 @@ namespace _61850_Client_v1._0a
         private string CID_Path = @"\\10.0.0.187\Document\International Link\PG59XX\QA\eNode Database\MB-50\MBES-50EC\M61-P14-ed2-t5-server";
         private Dictionary<string, string> CID_Item = new Dictionary<string, string>();
         private atop61850Client _61850Client;
-        
         public frm61850Client()
         {
             InitializeComponent();
@@ -25,6 +24,9 @@ namespace _61850_Client_v1._0a
         
         private void frm61850Client_Load(object sender, EventArgs e)
         {
+            timer1.Interval = 1000;
+            timer1.Enabled = true;
+            timer1.Disposed += Timer1_Disposed;
             //PrintCIDFiles();
             Backend_Socket_Information[] SI = new Backend_Socket_Information[1] {
                 new Backend_Socket_Information {
@@ -33,6 +35,11 @@ namespace _61850_Client_v1._0a
                 }
             };
             _61850Client = new atop61850Client(SI);
+        }
+
+        private void Timer1_Disposed(object sender, EventArgs e)
+        {
+            lblRuntime.Text = DateTime.Now.ToString();
         }
 
         private void PrintCIDFiles()
@@ -85,7 +92,19 @@ namespace _61850_Client_v1._0a
 
         private void btnStartTest_Click(object sender, EventArgs e)
         {
-            _61850Client.Start_Reliability(10, 10, 10);
+            atopWireshark wireShark = new atopWireshark();
+            Thread WS = new Thread(wireShark.Setup);
+            WS.IsBackground = true;
+            WS.Start();
+            timer1.Start();
+
+            Thread Process = new Thread(Process_Start);
+            Process.Start();
+        }
+
+        private void Process_Start()
+        {
+            _61850Client.Start_Reliability(1, 5, 5);
         }
     }
 }

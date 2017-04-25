@@ -1,0 +1,3 @@
+2017-04-25 14:02:59.3745 | ERROR | _61850_Client_v1._0a.atopLog | The URL cannot be empty.
+Parameter name: url 
+

@@ -28,25 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.ckbCID_Files = new System.Windows.Forms.CheckedListBox();
             this.btnImport = new System.Windows.Forms.Button();
-            this.rtbDispley = new System.Windows.Forms.RichTextBox();
             this.txtCID_Path = new System.Windows.Forms.TextBox();
             this.btnReadXML = new System.Windows.Forms.Button();
             this.btnStartTest = new System.Windows.Forms.Button();
+            this.lblRuntime = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lblProcessStep = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.lblRT = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // ckbCID_Files
             // 
+            this.ckbCID_Files.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ckbCID_Files.FormattingEnabled = true;
-            this.ckbCID_Files.Location = new System.Drawing.Point(12, 63);
+            this.ckbCID_Files.Location = new System.Drawing.Point(12, 121);
             this.ckbCID_Files.Name = "ckbCID_Files";
-            this.ckbCID_Files.Size = new System.Drawing.Size(560, 191);
+            this.ckbCID_Files.Size = new System.Drawing.Size(560, 422);
             this.ckbCID_Files.TabIndex = 0;
             // 
             // btnImport
             // 
-            this.btnImport.Font = new System.Drawing.Font("新細明體", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnImport.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnImport.Location = new System.Drawing.Point(12, 12);
             this.btnImport.Name = "btnImport";
             this.btnImport.Size = new System.Drawing.Size(116, 45);
@@ -54,15 +62,6 @@
             this.btnImport.Text = "Import CID";
             this.btnImport.UseVisualStyleBackColor = true;
             this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
-            // 
-            // rtbDispley
-            // 
-            this.rtbDispley.Location = new System.Drawing.Point(12, 260);
-            this.rtbDispley.Name = "rtbDispley";
-            this.rtbDispley.ReadOnly = true;
-            this.rtbDispley.Size = new System.Drawing.Size(560, 290);
-            this.rtbDispley.TabIndex = 2;
-            this.rtbDispley.Text = "";
             // 
             // txtCID_Path
             // 
@@ -73,9 +72,10 @@
             // 
             // btnReadXML
             // 
+            this.btnReadXML.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReadXML.Location = new System.Drawing.Point(497, 37);
             this.btnReadXML.Name = "btnReadXML";
-            this.btnReadXML.Size = new System.Drawing.Size(75, 23);
+            this.btnReadXML.Size = new System.Drawing.Size(75, 25);
             this.btnReadXML.TabIndex = 4;
             this.btnReadXML.Text = "Read XML";
             this.btnReadXML.UseVisualStyleBackColor = true;
@@ -83,13 +83,80 @@
             // 
             // btnStartTest
             // 
+            this.btnStartTest.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStartTest.Location = new System.Drawing.Point(416, 37);
             this.btnStartTest.Name = "btnStartTest";
-            this.btnStartTest.Size = new System.Drawing.Size(75, 23);
+            this.btnStartTest.Size = new System.Drawing.Size(75, 25);
             this.btnStartTest.TabIndex = 5;
             this.btnStartTest.Text = "Start Test";
             this.btnStartTest.UseVisualStyleBackColor = true;
             this.btnStartTest.Click += new System.EventHandler(this.btnStartTest_Click);
+            // 
+            // lblRuntime
+            // 
+            this.lblRuntime.AutoSize = true;
+            this.lblRuntime.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRuntime.Location = new System.Drawing.Point(482, 75);
+            this.lblRuntime.Name = "lblRuntime";
+            this.lblRuntime.Size = new System.Drawing.Size(90, 26);
+            this.lblRuntime.TabIndex = 6;
+            this.lblRuntime.Text = "00:00:00";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(370, 75);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(106, 32);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Run Time : ";
+            this.label2.UseCompatibleTextRendering = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(12, 75);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(134, 32);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Process Step : ";
+            this.label3.UseCompatibleTextRendering = true;
+            // 
+            // lblProcessStep
+            // 
+            this.lblProcessStep.AutoSize = true;
+            this.lblProcessStep.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProcessStep.Location = new System.Drawing.Point(152, 75);
+            this.lblProcessStep.Name = "lblProcessStep";
+            this.lblProcessStep.Size = new System.Drawing.Size(97, 26);
+            this.lblProcessStep.TabIndex = 9;
+            this.lblProcessStep.Text = "Poll Static";
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            // 
+            // lblRT
+            // 
+            this.lblRT.AutoSize = true;
+            this.lblRT.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRT.Location = new System.Drawing.Point(482, 75);
+            this.lblRT.Name = "lblRT";
+            this.lblRT.Size = new System.Drawing.Size(90, 26);
+            this.lblRT.TabIndex = 6;
+            this.lblRT.Text = "00:00:00";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(152, 75);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(97, 26);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Poll Static";
             // 
             // frm61850Client
             // 
@@ -97,10 +164,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(584, 562);
+            this.Controls.Add(this.lblProcessStep);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lblRuntime);
             this.Controls.Add(this.btnStartTest);
             this.Controls.Add(this.btnReadXML);
             this.Controls.Add(this.txtCID_Path);
-            this.Controls.Add(this.rtbDispley);
             this.Controls.Add(this.btnImport);
             this.Controls.Add(this.ckbCID_Files);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -116,9 +186,16 @@
 
         private System.Windows.Forms.CheckedListBox ckbCID_Files;
         private System.Windows.Forms.Button btnImport;
-        private System.Windows.Forms.RichTextBox rtbDispley;
         private System.Windows.Forms.TextBox txtCID_Path;
         private System.Windows.Forms.Button btnReadXML;
         private System.Windows.Forms.Button btnStartTest;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label lblRuntime;
+        private System.Windows.Forms.Label lblProcessStep;
+        private System.Windows.Forms.Label lblRT;
     }
 }

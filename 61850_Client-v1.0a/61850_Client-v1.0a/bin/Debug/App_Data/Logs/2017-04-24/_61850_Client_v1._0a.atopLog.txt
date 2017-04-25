@@ -1,0 +1,4 @@
+2017-04-24 20:31:47.7519 | INFO | _61850_Client_v1._0a.atopLog | Poll Control End 
+
+2017-04-24 20:32:31.3360 | INFO | _61850_Client_v1._0a.atopLog | Poll Static Start 
+
