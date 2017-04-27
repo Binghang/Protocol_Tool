@@ -253,7 +253,7 @@ namespace _61850_Client_v1._0a
                     atopLog.WriteLog(atopLogMode.TestFail, $"Backend Change Fail : Data Type {item.FUNCTION} Address {item.ADDRESS} Value {Backend_Change_Data}");
                     continue;
                 }
-                /* Wait change time 5 second */
+                /* Wait change time 30 second */
                 Thread.Sleep(30000);
                 /* Read Frontend Data */
                 string Frontend_Data = base.GetValue(item.IEC61850_SERVERNAME, item.IEC61850_TAGNAME, atop61850DataType.GetDataType(item.IEC61850_DATATYPE));
@@ -264,7 +264,7 @@ namespace _61850_Client_v1._0a
                         continue;
 
                     /* 測試失敗 */
-                    atopLog.WriteLog(atopLogMode.TestFail, $"{item.IEC61850_TAGNAME} Value: {Frontend_Data} , Backend Value : {Carried_Data}");
+                    atopLog.WriteLog(atopLogMode.TestFail, $"{item.IEC61850_TAGNAME} Value : {Frontend_Data} , Backend Type : {item.FUNCTION} Addr : {item.ADDRESS} Value : {Carried_Data}");
                 }
             }
         }

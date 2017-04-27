@@ -164,9 +164,9 @@ namespace _61850_Client_v1._0a
                     IEC61850_TAGNAME = InsertTagName(Row.Cells[columnindex61850.TAGNAME].ToString(), Row.Cells[columnindex61850.FC].ToString()),
                     IEC61850_EXCHANGETYPE = Row.Cells[columnindex61850.EXCHANGETYPE].ToString(),
                     IEC61850_FC = Row.Cells[columnindex61850.FC].ToString(),
-                    ADDRESS = Convert.ToInt16(Row.Cells[columnindex61850.COMPAREADDRESS].ToString()),
+                    ADDRESS = CheckAddress(Row.Cells[columnindex61850.DATATYPE].ToString(), Row.Cells[columnindex61850.COMPAREADDRESS].ToString()),
                     FUNCTION = Get_Function_Name(Row.Cells[columnindex61850.COMPAREFUNCTION].ToString().Replace("Read", "").Trim()),
-                    RANGE = Row.Cells[columnindex61850.COMPARERANGE].ToString()
+                    RANGE = CheckCount(Row.Cells[columnindex61850.DATATYPE].ToString(), Row.Cells[columnindex61850.COMPARERANGE].ToString())
                 });
                 return true;
             }
@@ -175,6 +175,17 @@ namespace _61850_Client_v1._0a
                 atopLog.WriteLog(atopLogMode.SystemError, exError.Message);
                 return false;
             }
+        }
+
+        private static int CheckAddress(string DataType, string Address)
+        {
+            return (DataType == "Float 32" || DataType == "Integer 32") ? (Convert.ToInt16(Address.Trim()) * 2) : Convert.ToInt16(Address);
+
+        }
+
+        private static string CheckCount(string DataType , string RowCount)
+        {
+            return (DataType == "Float 32" || DataType == "Integer 32") ? "2" : RowCount;
         }
 
         private static string Get_Function_Name(string FN)

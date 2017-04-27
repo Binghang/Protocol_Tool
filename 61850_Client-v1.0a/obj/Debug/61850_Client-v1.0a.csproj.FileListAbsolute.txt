@@ -1,0 +1,7 @@
+c:\users\bing\documents\visual studio 2015\Projects\61850_Client-v1.0a\61850_Client-v1.0a\bin\Debug\61850_Client-v1.0a.exe.config
+c:\users\bing\documents\visual studio 2015\Projects\61850_Client-v1.0a\61850_Client-v1.0a\obj\Debug\_61850_Client_v1._0a.frm61850.resources
+c:\users\bing\documents\visual studio 2015\Projects\61850_Client-v1.0a\61850_Client-v1.0a\obj\Debug\61850_Client-v1.0a.csproj.GenerateResource.Cache
+c:\users\bing\documents\visual studio 2015\Projects\61850_Client-v1.0a\61850_Client-v1.0a\bin\Debug\61850_Client-v1.0a.exe
+c:\users\bing\documents\visual studio 2015\Projects\61850_Client-v1.0a\61850_Client-v1.0a\bin\Debug\61850_Client-v1.0a.pdb
+c:\users\bing\documents\visual studio 2015\Projects\61850_Client-v1.0a\61850_Client-v1.0a\obj\Debug\61850_Client-v1.0a.exe
+c:\users\bing\documents\visual studio 2015\Projects\61850_Client-v1.0a\61850_Client-v1.0a\obj\Debug\61850_Client-v1.0a.pdb
